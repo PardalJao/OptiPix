@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ProcessedImage, ProcessingStatus, ImageFormat, ConversionSettings } from '../types';
 import { formatBytes } from '../utils/converter';
-import { Loader2, Download, Trash2, Wand2, Check, AlertCircle, Eye } from 'lucide-react';
+import { Loader2, Download, Trash2, Wand2, Check, AlertCircle } from 'lucide-react';
 
 interface ImageCardProps {
   image: ProcessedImage;
@@ -25,12 +25,7 @@ export const ImageCard: React.FC<ImageCardProps> = ({
     : 0;
 
   const isPositiveSaving = savingPercent > 0;
-  // Determine extension based on setting, not result, to reflect user choice immediately
-  const extension = image.settings.format.split('/')[1];
 
-  // Determine which image to show
-  // If we have a converted URL and we are NOT forcing original show, show converted.
-  // Otherwise show original.
   const displayUrl = (image.status === ProcessingStatus.COMPLETED && image.convertedUrl && !showOriginal)
     ? image.convertedUrl
     : image.previewUrl;
@@ -47,7 +42,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
         onTouchStart={() => setShowOriginal(true)}
         onTouchEnd={() => setShowOriginal(false)}
       >
-        {/* Checkerboard background for transparency */}
         <div className="absolute inset-0 opacity-20" style={{ 
             backgroundImage: 'linear-gradient(45deg, #333 25%, transparent 25%), linear-gradient(-45deg, #333 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #333 75%), linear-gradient(-45deg, transparent 75%, #333 75%)',
             backgroundSize: '20px 20px',
@@ -60,7 +54,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
           className="relative w-full h-full object-contain z-10"
         />
 
-        {/* Status Overlays */}
         <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
            {image.status === ProcessingStatus.CONVERTING && (
              <div className="bg-black/60 p-3 rounded-full backdrop-blur-sm">
@@ -74,7 +67,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
            )}
         </div>
 
-        {/* Overlay Label */}
         <div className="absolute top-2 left-2 z-20 pointer-events-none">
             {showOriginal ? (
                 <span className="bg-blue-600/90 text-white text-xs px-2 py-1 rounded font-bold shadow-lg">ORIGINAL</span>
@@ -85,7 +77,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
             )}
         </div>
 
-        {/* Compare Hint */}
         {image.status === ProcessingStatus.COMPLETED && (
             <div className="absolute bottom-2 left-0 right-0 text-center z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
                 <span className="bg-black/70 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">
@@ -95,15 +86,13 @@ export const ImageCard: React.FC<ImageCardProps> = ({
         )}
       </div>
 
-      {/* Info & Controls Section */}
       <div className="flex-1 p-5 flex flex-col h-full">
-        {/* Top Header */}
         <div className="flex justify-between items-start mb-4">
           <div className="overflow-hidden">
              <h3 className="font-medium text-slate-200 truncate max-w-[250px] text-lg" title={image.originalFile.name}>
                {image.originalFile.name}
              </h3>
-             <p className="text-xs text-slate-500 mt-1">{image.originalFile.type} • {image.originalFile.width > 0 ? `${image.originalFile.width}x${image.originalFile.height}px` : ''}</p>
+             <p className="text-xs text-slate-500 mt-1">{image.originalFile.type}</p>
           </div>
           <button 
             onClick={() => onRemove(image.id)}
@@ -115,7 +104,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
         </div>
 
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Stats Column */}
             <div className="space-y-4">
                 <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700/50">
                     <div className="flex justify-between items-end mb-1">
@@ -137,7 +125,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
                     </div>
                 </div>
 
-                {/* AI Alt Text */}
                 <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-700/50 min-h-[50px] flex items-center">
                     {image.altText ? (
                         <div className="flex items-start gap-2 w-full">
@@ -160,9 +147,7 @@ export const ImageCard: React.FC<ImageCardProps> = ({
                 </div>
             </div>
 
-            {/* Controls Column */}
             <div className="space-y-4">
-                 {/* Format Control */}
                  <div>
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Formato</label>
                     <div className="flex bg-slate-900 p-1 rounded-lg">
@@ -181,7 +166,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
                     </div>
                  </div>
 
-                 {/* Quality Control */}
                  <div>
                     <div className="flex justify-between items-center mb-2">
                         <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Qualidade</label>
@@ -200,7 +184,6 @@ export const ImageCard: React.FC<ImageCardProps> = ({
             </div>
         </div>
 
-        {/* Footer Actions */}
         <div className="mt-4 pt-4 border-t border-slate-700/50 flex justify-end">
             <button
                 onClick={() => onDownload(image.id)}
