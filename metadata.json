@@ -1,0 +1,5 @@
+{
+  "name": "OptiPix AI - Conversor Inteligente",
+  "description": "Conversor de imagens em lote para WEBP/AVIF com controle de qualidade e geração de Alt Text via Gemini AI.",
+  "requestFramePermissions": []
+}
